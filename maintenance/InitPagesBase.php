@@ -27,7 +27,6 @@ class InitPagesBase extends Maintenance {
 		$this->mDescription = "Init pages";
 		$this->addOption ( 'setHomePage', "Set the wiki home page", false, false );
 		$this->addOption ( 'force', "force edit of existing pages", false, false );
-		$this->addOption ( 'int', "use internationnalized pages", false, false );
 	}
 
 	protected function getUpdateKey() {
@@ -39,12 +38,9 @@ class InitPagesBase extends Maintenance {
 	}
 
 	public function execute() {
-		global $wgContLang;
 
 		$setWikifabHomePage = $this->getOption ( 'setHomePage' );
 		$force = $this->getOption ( 'force' ) ? true : false;
-
-		$lang = $this->getOption ( 'int' ) ? 'int' : $wgContLang->getCode();
 
 		$homePageFile = [
 				'fr' => 'Accueil.txt',
@@ -52,7 +48,7 @@ class InitPagesBase extends Maintenance {
 				'int' => 'Accueil.txt'
 		];
 
-		$pagelist = $this->getPageListToCreate ($lang);
+		$pagelist = $this->getPageListToCreate ();
 
 		echo "Setting Up wikifab pages ...\n";
 
@@ -63,7 +59,7 @@ class InitPagesBase extends Maintenance {
 			$ret = Title::newMainPage();
 			$pageTitle = $ret->getText();
 			$title = $this->getPageName ( $pageTitle );
-			$content = $this->getPageContent ( $homePageFile[$lang], $lang);
+			$content = $this->getPageContent ( $homePageFile['int']);
 			$this->createPage ( $title, $content, true);
 
 		} else {
@@ -75,7 +71,7 @@ class InitPagesBase extends Maintenance {
 				continue;
 			}
 			$title = $this->getPageName ( $page );
-			$content = $this->getPageContent ($page, $lang);
+			$content = $this->getPageContent ($page);
 			$this->createPage ( $title, $content , $force);
 		}
 	}
@@ -241,13 +237,12 @@ class InitPagesBase extends Maintenance {
 
 		return $page;
 	}
-	protected function getPagesDirs($lang) {
+	protected function getPagesDirs() {
 		return [
-				__DIR__ . '/wikifabPages/' . $lang
 		];
 	}
-	protected function getPageContent($page, $lang = 'en') {
-		$dirs = $this->getPagesDirs($lang);
+	protected function getPageContent($page) {
+		$dirs = $this->getPagesDirs();
 
 		foreach ($dirs as $dir) {
 			if (file_exists($dir . '/' . $page)) {
@@ -257,10 +252,10 @@ class InitPagesBase extends Maintenance {
 
 		throw new Exception('File not found : ' . $page);
 	}
-	protected function getPageListToCreate( $lang = 'en') {
+	protected function getPageListToCreate() {
 		$result = [ ];
 
-		$dirs = $this->getPagesDirs($lang);
+		$dirs = $this->getPagesDirs();
 		foreach ($dirs as $dir) {
 			$files = scandir ( $dir );
 			foreach ( $files as $file ) {
