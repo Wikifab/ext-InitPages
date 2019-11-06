@@ -9,6 +9,7 @@ namespace InitPages;
 require_once $IP . '/maintenance/Maintenance.php';
 
 use ContentHandler;
+use Exception;
 use Maintenance;
 use Title;
 use User;
