@@ -23,6 +23,8 @@ use WikiPage;
  */
 class InitPagesBase extends Maintenance {
 
+	protected $nsprefixes = [];
+
 	public function __construct() {
 		parent::__construct ();
 		$this->mDescription = "Init pages";
@@ -237,6 +239,16 @@ class InitPagesBase extends Maintenance {
 		$page = str_replace ( '_', ' ', $page );
 		$page = str_replace ( '.txt', '', $page );
 
+		foreach ($this->nsprefixes as $key => $value) {
+			if (substr($page, 0, strlen($key)) == $key) {
+				$page = $value . substr($page, strlen($key)) ;
+			}
+		}
+		// translate suffix : */en
+		if (preg_match("/ ([a-z]{2})$/", $page, $matches)) {
+			$page = substr($page, 0, strlen($page)-3) . '/' . $matches[1];
+		}
+
 		return $page;
 	}
 	protected function getPagesDirs() {
@@ -266,7 +278,6 @@ class InitPagesBase extends Maintenance {
 				}
 			}
 		}
-
 		return $result;
 	}
 }
