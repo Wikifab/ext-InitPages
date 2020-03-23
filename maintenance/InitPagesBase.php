@@ -227,12 +227,13 @@ class InitPagesBase extends Maintenance {
 		if (strpos($page,'Template_') == 0) {
 			$page = str_replace ( 'Template_', 'Template:', $page );
 		}
-		$page = str_replace ( 'Module_', 'Module:', $page );
 		$page = str_replace ( 'Category_', 'Category:', $page );
-		$page = str_replace ( 'MediaWiki_', 'Mediawiki:', $page );
-		$page = str_replace ( 'Widget_', 'Widget:', $page );
-		$page = str_replace ( 'Help_', 'Help:', $page );
 		$page = str_replace ( 'Dokit_', 'Dokit:', $page );
+		$page = str_replace ( 'Help_', 'Help:', $page );
+		$page = str_replace ( 'MediaWiki_', 'Mediawiki:', $page );
+		$page = str_replace ( 'Module_', 'Module:', $page );
+		$page = str_replace ( 'Project_', 'Project:', $page );
+		$page = str_replace ( 'Widget_', 'Widget:', $page );
 		$page = str_replace ( '_', ' ', $page );
 		$page = str_replace ( '.txt', '', $page );
 
